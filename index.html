@@ -1,0 +1,158 @@
+<HTML>
+    <HEAD>
+        <TITLE>
+            Scriptik Help
+        </TITLE>
+    </HEAD>
+    <BODY>
+       <center><font size="2"><a href=#Usage>Usage</a> | <a href=#ConfigFile>Config File</a> | <a href=#SampleScripts>Sample Scripts</a></font></center>
+        <P><STRONG>Help</STRONG></P>
+		<p><font size="4">Scriptik is an application that provides a reliable hotfolder mechanism for scripting.</font><p>
+    <br><br>
+	<P><a name="Usage"><STRONG>Usage:</STRONG></a></P>
+    <center><img src=Scriptik.png></center>
+    <br>
+	<p><font size="4">The figure above shows the main window. Click the manage button in your application to add, remove, or edit your folders and their attached scripts.</font></p>
+	<br>
+	<center><img src=manage.png></center>
+	<p><font size="4">The figure above shows the management window. Click the "+" button to add an entry, the "-" button to remove an entry, or the edit button to modify and entry. Double clicking an entry in the table will allow modification of the clicked entry.</font></p>
+	 <br>
+	 <center><img src=addChange.png></center>
+	 <p><font size="4">The above figure shows the window for adding and modifying entries. Click the buttons to choose your script.<br><br> The inFolder selection is for the folder to watch for incoming files and pass them to the chosen script.<br><br> The outFolder selection is passed to the script as an argument. Your script can then use it as you see fit.  <br><br>Finally, choose the appropriate script type with the radio selection. Shell Script, AppleScript/Javascript(OSX 10.10 and later), InDesign(ExtendScript) or Photoshop(ExtendScript). 
+<br><br>		 
+Any scripting language can be used as a shell script so long as you include the interpreter directive in your script and change its mode to executable:
+</font></p>
+<pre>
+#!/bin/bash
+#!/usr/bin/osascript
+#!/usr/bin/python
+</pre>
+ 
+     <a name="ConfigFile"><p><big>Configuration File</big></p></a>
+ 	<p>The configuration file is saved to "Scriptik/config.xml" and contains the following elements:</p>
+<pre>
+	&#60;Config&#62;
+
+	&#60;inFolder&#62;
+	&#60;outFolder&#62;
+	&#60;theScript&#62;
+	&#60;ScriptType&#62;
+</pre>
+
+<p> &#60;Config&#62; is the parent element. Each entry in the Manage window is recorded in a block containing four entries: &#60;inFolder&#62;, &#60;outFolder&#62;, &#60;theScript&#62;, and &#60;ScriptType&#62;.
+
+<br><br><br>
+    <a name="SampleScripts"><p><big>Sample Scripts</big></p></a>
+    
+    <p><strong>AppleScript</strong></p>
+    <pre>
+on run {FileName, inFolder, outFolder}
+	
+	display dialog FileName & return & inFolder & return & outFolder
+	
+	set FileName to POSIX file FileName as string
+	set inFolder to POSIX file inFolder as string
+	set outFolder to POSIX file outFolder as string
+	
+	tell application "Finder" to move file FileName to folder outFolder
+end run
+    </pre>
+    
+    <br>
+    <p><strong>Shell Script (bash)</strong></p>
+    <p>Remember to 'chmod +x' your script in the terminal</p>
+    <pre>
+#!/bin/bash
+
+FILENAME=$1
+INFOLDER=$2
+OUTFOLDER=$3
+    
+echo $FILENAME >> ~/Desktop/BashScriptTest.txt
+echo $INFOLDER >> ~/Desktop/BashScriptTest.txt
+echo $OUTFOLDER >> ~/Desktop/BashScriptTest.txt
+    
+mv "$FILENAME" "$OUTFOLDER"
+    </pre>
+<br>
+    <p><strong>Shell Script (python)</strong></p>
+    <p>Remember to 'chmod +x' your script in the terminal</p>
+<pre>
+#!/usr/bin/python
+import sys
+import os
+import ntpath
+import shutil
+FileName = str(sys.argv[1])
+inFolder = str(sys.argv[2])
+outFolder = str(sys.argv[3])
+myFileName = ntpath.basename(FileName)
+path = os.path.join(os.path.expanduser('~'), 'Desktop', 'pythonTest.txt')
+print path
+text_file = open(path, 'a')
+
+output = FileName + "\n" + inFolder + "\n" + outFolder + "\n"
+fileOutput = outFolder + myFileName
+text_file.write(output)
+text_file.close()
+
+shutil.move(FileName, fileOutput)	
+</pre>
+
+<br>
+<p><strong>JavaScript (OSX 10.10 and later)</strong></p>
+<pre>
+function run(argv) {
+    var FileName = argv[0]
+    var inFolder = argv[1]
+    var outFolder = argv[2]
+    theApp = Application.currentApplication();
+    theApp.includeStandardAdditions = true;
+    appSysEvents = Application("System Events")
+    theApp.displayDialog(FileName + '\n' + inFolder + '\n' + outFolder);
+    appSysEvents.move(FileName,{to: outFolder});
+}
+</pre>
+<br>
+    <p><strong>ExtendScript InDesign</strong></p>
+	<p>Don't call main() in your own script, Scriptik will call main(). 
+
+    <pre>
+#target Indesign
+function main(argv) {
+    var fileName = File(argv[0]).fsName.toString();
+    var inFolder = argv[1].toString();
+    var outFolder = argv[2].toString();
+//calls applescript to move the file that lands in the watch folder.
+	alert(fileName + '\n' + inFolder + '\n' + outFolder);
+	var applescriptMoveFile = "set fileName2 to POSIX file \"" + fileName + "\"\r";
+	applescriptMoveFile += "set toFolder2 to POSIX file \"" + outFolder + "\"\r";
+	applescriptMoveFile += "set fileName2 to fileName2 as string\r";
+	applescriptMoveFile += "set toFolder2 to toFolder2 as string\r";
+	applescriptMoveFile += "tell application \"Finder\" to move file fileName2 to toFolder2\r";
+	app.doScript(applescriptMoveFile, ScriptLanguage.APPLESCRIPT_LANGUAGE);
+ 
+ }
+    </pre>
+    
+ 	<br>
+	    <p><strong>ExtendScript Photoshop</strong></p>
+		<p>Don't call main() in your own script, Scriptik will call main(). 
+
+	    <pre>
+#target Photoshop
+function main(argv) {
+    var fileName = File(argv[0]).fsName.toString();
+    var inFolder = argv[1].toString();
+    var outFolder = argv[2].toString();
+ 	alert(fileName + '\n' + inFolder + '\n' + outFolder);
+
+//invoke shell command to move the file that lands in the watch folder.
+
+app.system("mv \"" + fileName + "\" \"" + outFolder + "\"");
+ } 
+	    </pre>
+    
+	    <br>
+    </BODY>
+</HTML>
