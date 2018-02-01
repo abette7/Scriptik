@@ -409,9 +409,9 @@ bool stillExecuting = false;
     
     int i, count = [inFolders count];
     
-    stillExecuting = true;
+    
     for (i=0; i < count; i++) {
-        
+        stillExecuting = true;
         NSString *theScript = [[theScripts objectAtIndex:i]stringValue];
         NSString *inFolder = [[inFolders objectAtIndex:i]stringValue];
         NSString *outFolder = [[outFolders objectAtIndex:i]stringValue];
@@ -451,9 +451,12 @@ bool stillExecuting = false;
                     [theFilesOnly addObject: myfileName];
                 }
             }
-            
+
             if ([theFilesOnly count] != 0){
-                
+                if (isRunning == 0){
+                    stillExecuting = false;
+                    return;
+                }
             NSURL *fileName = [theFilesOnly objectAtIndex:0];
             NSString *fileNamewithPath = (@"%@",[inFolder stringByAppendingPathComponent:fileName]);
 
@@ -510,15 +513,16 @@ bool stillExecuting = false;
                     
                     
                 }
+
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateInterfaceFinish];
-                    [_currSpinner stopAnimation:nil];
+                [self updateInterfaceFinish];
+                [_currSpinner stopAnimation:nil];
                 });
                 stillExecuting = false;
             }
                     
-
+            
                 }
         if ([autoReport isEqualToString:@"true"]){
             NSDateFormatter *reportDateFormatter=[[NSDateFormatter alloc] init];
