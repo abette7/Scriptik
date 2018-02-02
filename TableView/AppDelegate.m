@@ -358,7 +358,10 @@ bool stillExecuting = false;
         });
     });
     NSLog(@"Start");
-    
+    if((stillExecuting == true) && (isRunning == 0)){
+        [_currStatus setStringValue:@"Queueing. . ."];
+        [_currSpinner startAnimation:nil];
+    }
     
 }
 
@@ -371,6 +374,7 @@ bool stillExecuting = false;
 }
 
 - (void) timerFired:(NSTimer*)theTimer{
+
     if(!stillExecuting){
         stillExecuting = true;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -536,17 +540,17 @@ bool stillExecuting = false;
                     [self purgeLog];
                     reportDidFire = @"true";
                 }
-if (![myReportDate isEqualToString:@"01"]){
-    reportDidFire = @"false";
+                if (![myReportDate isEqualToString:@"01"]){
+                    reportDidFire = @"false";
     
-}
+                }
 
             }
-        }
+        } //end autoReport if Statement
         
             }
-        });
-        //
+        }); //end main dispatch
+        
     }
         }
         
