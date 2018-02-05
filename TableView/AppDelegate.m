@@ -164,6 +164,33 @@ bool stillExecuting = false;
                 [sock writeData:myNetData withTimeout:-1 tag:FILE_MSG];
             }
             
+//            if ([getMSG isEqualToString:@"stop"]){
+//                [_StartStopButton setTitle:@"Start"];
+//                [self stopTimers];
+//                isRunning = 0;
+//                NSString *myNetString = @"";
+//
+//                NSString *myStatus = @"stopping";
+//                myNetString = [NSString stringWithFormat: @"%@\r\n",myStatus];
+//
+//
+//                NSData *myNetData = [myNetString dataUsingEncoding:NSUTF8StringEncoding];
+//                [sock writeData:myNetData withTimeout:-1 tag:FILE_MSG];
+//            }
+//            if ([getMSG isEqualToString:@"start"]){
+//                [_StartStopButton setTitle:@"Stop"];
+//                [self startTimers];
+//                isRunning = 1;
+//                NSString *myNetString = @"";
+//
+//                NSString *myStatus = @"starting";
+//                myNetString = [NSString stringWithFormat: @"%@\r\n",myStatus];
+//                
+//
+//                NSData *myNetData = [myNetString dataUsingEncoding:NSUTF8StringEncoding];
+//                [sock writeData:myNetData withTimeout:-1 tag:FILE_MSG];
+//            }
+            
         }
     });
     
@@ -871,7 +898,7 @@ addEntryIsEnabled = @"true";
     
 
     
-    NSString *pathToFile = @"~/scriptRunner";
+    NSString *pathToFile = @"~/Scriptik";
     NSString *expandedPathToFile = [pathToFile stringByExpandingTildeInPath];
     BOOL isDir = NO;
     BOOL isFile = [[NSFileManager defaultManager] fileExistsAtPath:expandedPathToFile isDirectory:&isDir];
@@ -1490,7 +1517,7 @@ addEntryIsEnabled = @"true";
             NSAppleEventDescriptor* returnDescriptor = NULL;
             NSString *emailScript = [NSString stringWithFormat:@"\
                                      tell application \"Mail\"\n\
-                                     set theMessage to make new outgoing message with properties {subject:\"scriptRunner Error\", content:\"%@\", visible:false}\n\
+                                     set theMessage to make new outgoing message with properties {subject:\"Scriptik Error\", content:\"%@\", visible:false}\n\
                                      tell theMessage\n\
                                      make new to recipient with properties {address:\"%@\"}\n\
                                      send\n\
