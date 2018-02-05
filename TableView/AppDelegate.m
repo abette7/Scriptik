@@ -130,67 +130,84 @@ bool stillExecuting = false;
             NSData *strData = [data subdataWithRange:NSMakeRange(0, [data length] - 2)];
             NSString *msg = [[NSString alloc] initWithData:strData encoding:NSUTF8StringEncoding];
             NSString *getMSG = msg;
-            
-            if ([getMSG isEqualToString:@"get"]){
+            if(getMSG){
+                if ([getMSG isEqualToString:@"get"]){
+                        NSString *myNetString = @"";
+                    
+                        NSString *myStatus = [_currStatus stringValue];
+                        myNetString = [NSString stringWithFormat: @"%@\r\n",myStatus];
+                    
+                    
+                    NSData *myNetData = [myNetString dataUsingEncoding:NSUTF8StringEncoding];
+                    [sock writeData:myNetData withTimeout:-1 tag:ECHO_MSG];
+                    return;
+                }
+                
+                if ([getMSG isEqualToString:@"getScript"]){
                     NSString *myNetString = @"";
-                
-                    NSString *myStatus = [_currStatus stringValue];
+                    
+                    NSString *myStatus = [_currScript stringValue];
                     myNetString = [NSString stringWithFormat: @"%@\r\n",myStatus];
-                
-                
-                NSData *myNetData = [myNetString dataUsingEncoding:NSUTF8StringEncoding];
-                [sock writeData:myNetData withTimeout:-1 tag:ECHO_MSG];
-            }
-            
-            if ([getMSG isEqualToString:@"getScript"]){
-                NSString *myNetString = @"";
-                
-                NSString *myStatus = [_currScript stringValue];
-                myNetString = [NSString stringWithFormat: @"%@\r\n",myStatus];
-                
-                
-                NSData *myNetData = [myNetString dataUsingEncoding:NSUTF8StringEncoding];
-                [sock writeData:myNetData withTimeout:-1 tag:SCRIPT_MSG];
-            }
+                    
+                    
+                    NSData *myNetData = [myNetString dataUsingEncoding:NSUTF8StringEncoding];
+                    [sock writeData:myNetData withTimeout:-1 tag:SCRIPT_MSG];
+                    return;
+                }
 
-            if ([getMSG isEqualToString:@"getFile"]){
+                if ([getMSG isEqualToString:@"getFile"]){
+                    NSString *myNetString = @"";
+                    
+                    NSString *myStatus = [_currFile stringValue];
+                    myNetString = [NSString stringWithFormat: @"%@\r\n",myStatus];
+                    
+                    
+                    NSData *myNetData = [myNetString dataUsingEncoding:NSUTF8StringEncoding];
+                    [sock writeData:myNetData withTimeout:-1 tag:FILE_MSG];
+                    return;
+                }
+                
+//                if ([getMSG isEqualToString:@"stop"]){
+//                    [_StartStopButton setTitle:@"Start"];
+//                    [self stopTimers];
+//                    isRunning = 0;
+//                    NSString *myNetString = @"";
+//    
+//                    NSString *myStatus = @"stopping";
+//                    myNetString = [NSString stringWithFormat: @"%@\r\n",myStatus];
+//    
+//    
+//                    NSData *myNetData = [myNetString dataUsingEncoding:NSUTF8StringEncoding];
+//                    [sock writeData:myNetData withTimeout:-1 tag:FILE_MSG];
+//                    return;
+//                }
+//                if ([getMSG isEqualToString:@"start"]){
+//                    [_StartStopButton setTitle:@"Stop"];
+//                    [self startTimers];
+//                    isRunning = 1;
+//                    NSString *myNetString = @"";
+//    
+//                    NSString *myStatus = @"starting";
+//                    myNetString = [NSString stringWithFormat: @"%@\r\n",myStatus];
+//    
+//    
+//                    NSData *myNetData = [myNetString dataUsingEncoding:NSUTF8StringEncoding];
+//                    [sock writeData:myNetData withTimeout:-1 tag:FILE_MSG];
+//                    return;
+//                }
+               
+                
+            
+            else{
                 NSString *myNetString = @"";
                 
-                NSString *myStatus = [_currFile stringValue];
+                NSString *myStatus = @"input error";
                 myNetString = [NSString stringWithFormat: @"%@\r\n",myStatus];
-                
-                
                 NSData *myNetData = [myNetString dataUsingEncoding:NSUTF8StringEncoding];
                 [sock writeData:myNetData withTimeout:-1 tag:FILE_MSG];
+                return;
             }
-            
-//            if ([getMSG isEqualToString:@"stop"]){
-//                [_StartStopButton setTitle:@"Start"];
-//                [self stopTimers];
-//                isRunning = 0;
-//                NSString *myNetString = @"";
-//
-//                NSString *myStatus = @"stopping";
-//                myNetString = [NSString stringWithFormat: @"%@\r\n",myStatus];
-//
-//
-//                NSData *myNetData = [myNetString dataUsingEncoding:NSUTF8StringEncoding];
-//                [sock writeData:myNetData withTimeout:-1 tag:FILE_MSG];
-//            }
-//            if ([getMSG isEqualToString:@"start"]){
-//                [_StartStopButton setTitle:@"Stop"];
-//                [self startTimers];
-//                isRunning = 1;
-//                NSString *myNetString = @"";
-//
-//                NSString *myStatus = @"starting";
-//                myNetString = [NSString stringWithFormat: @"%@\r\n",myStatus];
-//                
-//
-//                NSData *myNetData = [myNetString dataUsingEncoding:NSUTF8StringEncoding];
-//                [sock writeData:myNetData withTimeout:-1 tag:FILE_MSG];
-//            }
-            
+    }
         }
     });
     
