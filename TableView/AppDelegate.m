@@ -43,6 +43,7 @@ NSString *emailError = @"";
 NSString *myEmailAddress = @"";
 NSString *autoReport=@"false";
 NSString *reportDidFire=@"false";
+//NSString *isEnabled=@"";
 int port = 8081;
 bool stillExecuting = false;
 
@@ -412,7 +413,7 @@ bool stillExecuting = false;
 - (void) stopTimers
 {
     NSLog(@"Stop");
-  [self.theTimer invalidate];
+    [self.theTimer invalidate];
     [self updateInterfaceInit];
     
 }
@@ -421,157 +422,183 @@ bool stillExecuting = false;
 
     if(!stillExecuting){
         stillExecuting = true;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-        [_currStatus setStringValue:@"Idle. . ."];
-        });
-    NSString *xmlPath = @"~/Scriptik/config.xml";
-    NSString *expandedXMLPath = [xmlPath stringByExpandingTildeInPath];
-    NSError         *error=nil;
-    NSXMLDocument   *xmlDOC=[[NSXMLDocument alloc]
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_currStatus setStringValue:@"Idle. . ."];
+            });
+            
+            NSString *xmlPath = @"~/Scriptik/config.xml";
+            NSString *expandedXMLPath = [xmlPath stringByExpandingTildeInPath];
+            NSError         *error=nil;
+            NSXMLDocument   *xmlDOC=[[NSXMLDocument alloc]
                              initWithContentsOfURL:[NSURL fileURLWithPath:expandedXMLPath]
                              options:NSXMLNodeOptionsNone
                              error:&error
                              ];
     
-    if(!xmlDOC)
-    {
-        NSLog(@"Error reading '%@': %@",xmlPath,error);
+            if(!xmlDOC){
+                
+                NSLog(@"Error reading '%@': %@",xmlPath,error);
         
-        return;
-    }
+                return;
+            }
     
-    NSXMLElement    *rootElement=[xmlDOC rootElement];
-    NSArray         *theScripts=[rootElement nodesForXPath:@"theScript" error:&error];
-    NSArray         *inFolders=[rootElement nodesForXPath:@"inFolder" error:&error];
-    NSArray         *outFolders=[rootElement nodesForXPath:@"outFolder" error:&error];
-    NSArray         *ScriptTypes=[rootElement nodesForXPath:@"ScriptType" error:&error];
-    NSArray         *Enableds=[rootElement nodesForXPath:@"Enabled" error:&error];
-    if(!inFolders)
-    {
-        NSLog(@"Unable to get 'XMLElement': %@",error);
+            NSXMLElement    *rootElement=[xmlDOC rootElement];
+            NSArray         *theScripts=[rootElement nodesForXPath:@"theScript" error:&error];
+            NSArray         *inFolders=[rootElement nodesForXPath:@"inFolder" error:&error];
+            NSArray         *outFolders=[rootElement nodesForXPath:@"outFolder" error:&error];
+            NSArray         *ScriptTypes=[rootElement nodesForXPath:@"ScriptType" error:&error];
+            NSArray         *Enableds=[rootElement nodesForXPath:@"Enabled" error:&error];
+    
+            if(!inFolders){
+                
+                NSLog(@"Unable to get 'XMLElement': %@",error);
         
-        return;
-    }
-
-    
-    int i, count = [inFolders count];
-    
-    
-    for (i=0; i < count; i++) {
-        stillExecuting = true;
-        NSString *theScript = [[theScripts objectAtIndex:i]stringValue];
-        NSString *inFolder = [[inFolders objectAtIndex:i]stringValue];
-        NSString *outFolder = [[outFolders objectAtIndex:i]stringValue];
-        NSString *ScriptType = [[ScriptTypes objectAtIndex:i]stringValue];
-        NSString *Enabled = [[Enableds objectAtIndex:i]stringValue];
-        
-        NSString *isEnabled = Enabled;
-        if ([Enabled isEqualToString:@"true"])
-            
-        {
-            NSString *pathValidate = [self validateCheck:theScript:inFolder:outFolder];
-            
-            if ([pathValidate isEqualToString:@"true"]){
-                
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            
-            NSArray *theFiles =  [fileManager contentsOfDirectoryAtURL:[NSURL fileURLWithPath:inFolder]
-                                            includingPropertiesForKeys:[NSArray arrayWithObject:NSURLNameKey]
-                                                               options:NSDirectoryEnumerationSkipsHiddenFiles
-                                                                 error:nil];
-            NSMutableArray *theFilesOnly=[NSMutableArray array];
-            
-            for (NSURL *theURL in theFiles) {
-                
-                // Retrieve the file name. From NSURLNameKey, cached during the enumeration.
-                NSString *myfileName;
-                [theURL getResourceValue:&myfileName forKey:NSURLNameKey error:NULL];
-                
-                // Retrieve whether a directory. From NSURLIsDirectoryKey, also
-                // cached during the enumeration.
-                
-                NSNumber *isDirectory;
-                [theURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:NULL];
-                
-                if([isDirectory boolValue] == NO)
-                {
-                    [theFilesOnly addObject: myfileName];
-                }
+                return;
             }
 
-            if ([theFilesOnly count] != 0){
-                if (isRunning == 0){
-                    stillExecuting = false;
-                    return;
-                }
-            NSURL *fileName = [theFilesOnly objectAtIndex:0];
-            NSString *fileNamewithPath = (@"%@",[inFolder stringByAppendingPathComponent:fileName]);
-
+    
+            int i, count = [inFolders count];
+    
+    
+            for (i=0; i < count; i++) {
+                stillExecuting = true;
+                NSString *theScript = [[theScripts objectAtIndex:i]stringValue];
+                NSString *inFolder = [[inFolders objectAtIndex:i]stringValue];
+                NSString *outFolder = [[outFolders objectAtIndex:i]stringValue];
+                NSString *ScriptType = [[ScriptTypes objectAtIndex:i]stringValue];
+                NSString *Enabled = [[Enableds objectAtIndex:i]stringValue];
+        
+                NSString *isEnabled = Enabled;
                 
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateInterface:theScript:fileNamewithPath];
-                    });
-                  //the if statements below filter execution to the correct handler
-                if ([ScriptType isEqualToString:@"AppleScript"]){
-
-
-                NSString *interpreter = @"/usr/bin/osascript";
-                NSArray *setArguments = [NSArray arrayWithObjects:theScript, fileNamewithPath, inFolder, outFolder, nil];
-                    [self updateLog:theScript:fileNamewithPath:inFolder:outFolder];
-
-                [[NSTask launchedTaskWithLaunchPath:interpreter arguments:setArguments]waitUntilExit];
+                //NSLog(@"%@,%@",inFolder,Enabled);
+                    if (isEnabled){
+                        
+                        NSString *pathValidate = [self validateCheck:theScript:inFolder:outFolder];
+            
+                            if ([pathValidate isEqualToString:@"true"]){
                 
+                                NSFileManager *fileManager = [NSFileManager defaultManager];
+            
+                                NSArray *theFiles =  [fileManager contentsOfDirectoryAtURL:[NSURL fileURLWithPath:inFolder] includingPropertiesForKeys:[NSArray arrayWithObject:NSURLNameKey] options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
+                                
+                                NSMutableArray *theFilesOnly=[NSMutableArray array];
+            
+                                    for (NSURL *theURL in theFiles) {
+                
+                                        // Retrieve the file name. From NSURLNameKey, cached during the enumeration.
+                                        NSString *myfileName;
+                                        [theURL getResourceValue:&myfileName forKey:NSURLNameKey error:NULL];
+                
+                                        // Retrieve whether a directory. From NSURLIsDirectoryKey, also
+                                        // cached during the enumeration.
+                
+                                        NSNumber *isDirectory;
+                                        [theURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:NULL];
+                
+                                            if([isDirectory boolValue] == NO){
+                                                
+                                                [theFilesOnly addObject: myfileName];
+                                            }
+                                    }
 
-                }
-                if ([ScriptType isEqualToString:@"InDesign"]){
-                    
+                                    if ([theFilesOnly count] != 0){
+                                        if (isRunning == 0){
+                                            stillExecuting = false;
+                                            return;
+                                    }
+                                    
+                                    NSURL *fileName = [theFilesOnly objectAtIndex:0];
+                                    NSString *fileNamewithPath = (@"%@",[inFolder stringByAppendingPathComponent:fileName]);
 
-                    NSString *tildeHandler = @"~/Scriptik/Handlers/IDHandler";
-                    NSString *handler = [tildeHandler stringByExpandingTildeInPath];
-                    NSString *interpreter = @"/usr/bin/osascript";
-                    NSArray *setArguments = [NSArray arrayWithObjects:handler, theScript, fileNamewithPath, inFolder, outFolder, nil];
-                    [self updateLog:theScript:fileNamewithPath:inFolder:outFolder];
+               
 
-                    [[NSTask launchedTaskWithLaunchPath:interpreter arguments:setArguments]waitUntilExit];
-                    
+                                    if ([ScriptType isEqualToString:@"AppleScript"]){
+                                        if ([isEnabled isEqualToString:@"true"]){
+                                            
+                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                [self updateInterface:theScript:fileNamewithPath];
+                                            });
+                                            
+                                            NSString *interpreter = @"/usr/bin/osascript";
+                                            NSArray *setArguments = [NSArray arrayWithObjects:theScript, fileNamewithPath, inFolder, outFolder, nil];
+                                            
+                                            [self updateLog:theScript:fileNamewithPath:inFolder:outFolder];
 
-                }
-                if ([ScriptType isEqualToString:@"ShellScript"]){
-                    
+                                            [[NSTask launchedTaskWithLaunchPath:interpreter arguments:setArguments]waitUntilExit];
+                
+                                        }
+                                    }
+                                        
+                                    if ([ScriptType isEqualToString:@"InDesign"]){
+                                        if ([isEnabled isEqualToString:@"true"]){
+                                            
+                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                [self updateInterface:theScript:fileNamewithPath];
+                                            });
+                                            
+                                            //Call InDesign Handler Code. This is Applescript to do the InDesign hand off.
+                                            //The code was made external to allow for modification in the event an Adobe update broke it.
+                                            
+                                            NSString *tildeHandler = @"~/Scriptik/Handlers/IDHandler";
+                                            NSString *handler = [tildeHandler stringByExpandingTildeInPath];
+                                            NSString *interpreter = @"/usr/bin/osascript";
+                                            NSArray *setArguments = [NSArray arrayWithObjects:handler, theScript, fileNamewithPath, inFolder, outFolder, nil];
+                                            
+                                            [self updateLog:theScript:fileNamewithPath:inFolder:outFolder];
 
-                    NSString *interpreter = theScript;
-                    NSArray *setArguments = [NSArray arrayWithObjects:fileNamewithPath, inFolder, outFolder, nil];
-                    [self updateLog:theScript:fileNamewithPath:inFolder:outFolder];
+                                            [[NSTask launchedTaskWithLaunchPath:interpreter arguments:setArguments]waitUntilExit];
+                                        }
+                                    }
+                                        
+                                    if ([ScriptType isEqualToString:@"ShellScript"]){
+                                        if ([isEnabled isEqualToString:@"true"]){
+                                            
+                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                [self updateInterface:theScript:fileNamewithPath];
+                                            });
+                                            
+                                            NSString *interpreter = theScript;
+                                            NSArray *setArguments = [NSArray arrayWithObjects:fileNamewithPath, inFolder, outFolder, nil];
+                                            
+                                            [self updateLog:theScript:fileNamewithPath:inFolder:outFolder];
 
-                    [[NSTask launchedTaskWithLaunchPath:interpreter arguments:setArguments]waitUntilExit];
-                    
-                    
-                }
-                if ([ScriptType isEqualToString:@"Photoshop"]){
-                    
+                                            [[NSTask launchedTaskWithLaunchPath:interpreter arguments:setArguments]waitUntilExit];
+                                        }
+                                    }
+                                        
+                                    if ([ScriptType isEqualToString:@"Photoshop"]){
+                                        if ([isEnabled isEqualToString:@"true"]){
+                        
+                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                [self updateInterface:theScript:fileNamewithPath];
+                                            });
+                                            
+                                            NSString *tildeHandler = @"~/Scriptik/Handlers/PhotoshopHandler";
+                                            NSString *handler = [tildeHandler stringByExpandingTildeInPath];
+                                            NSString *interpreter = @"/usr/bin/osascript";
+                                            NSArray *setArguments = [NSArray arrayWithObjects:handler, theScript, fileNamewithPath, inFolder, outFolder, nil];
+                                            
+                                            [self updateLog:theScript:fileNamewithPath:inFolder:outFolder];
 
-                    NSString *tildeHandler = @"~/Scriptik/Handlers/PhotoshopHandler";
-                    NSString *handler = [tildeHandler stringByExpandingTildeInPath];
-                    NSString *interpreter = @"/usr/bin/osascript";
-                    NSArray *setArguments = [NSArray arrayWithObjects:handler, theScript, fileNamewithPath, inFolder, outFolder, nil];
-                    [self updateLog:theScript:fileNamewithPath:inFolder:outFolder];
+                                            [[NSTask launchedTaskWithLaunchPath:interpreter arguments:setArguments]waitUntilExit];
+                                        }
+                                    }
 
-                    [[NSTask launchedTaskWithLaunchPath:interpreter arguments:setArguments]waitUntilExit];
-                    
-                    
-                }
-
-                }
-                dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateInterfaceFinish];
-                [_currSpinner stopAnimation:nil];
-                });
-                stillExecuting = false;
-            }
+                                }
+                                
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [self updateInterfaceFinish];
+                                    [_currSpinner stopAnimation:nil];
+                                });
+                                //dispatch_set_finalizer_f(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), NULL);
+                                stillExecuting = false;
+                
+                            }
                     
             
                 }
+                //This is not a good place for the auto report code, should be in a function.
         if ([autoReport isEqualToString:@"true"]){
             NSDateFormatter *reportDateFormatter=[[NSDateFormatter alloc] init];
             [reportDateFormatter setDateFormat:@"dd"];
@@ -595,6 +622,12 @@ bool stillExecuting = false;
             }
         }); //end main dispatch
         
+    }
+    
+    else{
+
+        //stillExecuting = false;
+        return;
     }
         }
         

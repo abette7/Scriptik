@@ -17,10 +17,8 @@
 		98055F1A1C431C1800EA21E0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 98055F181C431C1800EA21E0 /* MainMenu.xib */; };
 		98055F251C431C1800EA21E0 /* TableViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 98055F241C431C1800EA21E0 /* TableViewTests.m */; };
 		98055F301C431C1800EA21E0 /* TableViewUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 98055F2F1C431C1800EA21E0 /* TableViewUITests.m */; };
-		9859AAF01FB13ADA00442FE5 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98713EAE1FAE737E002A64DF /* CocoaAsyncSocket.framework */; };
 		9859AAF11FB13ADA00442FE5 /* CocoaAsyncSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 98713EAE1FAE737E002A64DF /* CocoaAsyncSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9862B6D31C659FD600F9ABF4 /* Warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 9862B6D21C659FD600F9ABF4 /* Warning.png */; };
-		98713EAF1FAE737E002A64DF /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98713EAE1FAE737E002A64DF /* CocoaAsyncSocket.framework */; };
 		9F0DD3231E71904E00DB1BFB /* Scriptik.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F0DD3221E71904E00DB1BFB /* Scriptik.png */; };
 /* End PBXBuildFile section */
 
@@ -84,8 +82,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9859AAF01FB13ADA00442FE5 /* CocoaAsyncSocket.framework in Frameworks */,
-				98713EAF1FAE737E002A64DF /* CocoaAsyncSocket.framework in Frameworks */,
 				98035EAF1C547D3E003CEABF /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
