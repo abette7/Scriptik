@@ -74,7 +74,7 @@ bool stillExecuting = false;
 
 
 }
-//CocoaAsyncSockets Functions
+//CocoaAsyncSockets Functions -- This code is largely taken from the CocoaAsyncSockets examples
 - (void)socket:(GCDAsyncSocket *)sock didAcceptNewSocket:(GCDAsyncSocket *)newSocket
 {
     // This method is executed on the socketQueue (not the main thread)
@@ -124,6 +124,9 @@ bool stillExecuting = false;
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
     // This method is executed on the socketQueue (not the main thread)
+    // The following if statements were built to provide status updates to a network client.
+    // Commented out in this section is code for enabling start/stop from the network. This code
+    // should not be implemented until encryption and authentication is added.
     
     dispatch_async(dispatch_get_main_queue(), ^{
         @autoreleasepool {
@@ -274,7 +277,7 @@ bool stillExecuting = false;
 - (void) populateTable
 {
 
-    
+    //This function populates the table in the management window.
     
     [arrayController setContent:nil];
     NSString *xmlPath = @"~/Scriptik/config.xml";
@@ -393,6 +396,7 @@ bool stillExecuting = false;
 - (void) startTimers
 {
    //Using GCD to thread the NSTimer that fires the script runner engine.
+   
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         dispatch_async( dispatch_get_main_queue(), ^{
@@ -419,7 +423,10 @@ bool stillExecuting = false;
 }
 
 - (void) timerFired:(NSTimer*)theTimer{
-
+    
+    //Master timer loop. This function loops through the inFolders in a round robin fashion, This keeps one folder from
+    //monopolizing process time. Interface updates must be done on the main queue "dispatch_async(dispatch_get_main_queue(), ^{ interface updates here});"
+    
     if(!stillExecuting){
         stillExecuting = true;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -516,6 +523,8 @@ bool stillExecuting = false;
                                     if ([ScriptType isEqualToString:@"AppleScript"]){
                                         if ([isEnabled isEqualToString:@"true"]){
                                             
+                                            //Applescript and Javascript will execute via osascript
+                                            
                                             dispatch_async(dispatch_get_main_queue(), ^{
                                                 [self updateInterface:theScript:fileNamewithPath];
                                             });
@@ -554,6 +563,8 @@ bool stillExecuting = false;
                                     if ([ScriptType isEqualToString:@"ShellScript"]){
                                         if ([isEnabled isEqualToString:@"true"]){
                                             
+                                            //Shell scripts will fire off against the interpreter delcared in the script.
+                                            
                                             dispatch_async(dispatch_get_main_queue(), ^{
                                                 [self updateInterface:theScript:fileNamewithPath];
                                             });
@@ -573,6 +584,9 @@ bool stillExecuting = false;
                                             dispatch_async(dispatch_get_main_queue(), ^{
                                                 [self updateInterface:theScript:fileNamewithPath];
                                             });
+                                            
+                                            //Call Photoshop Handler Code. This is Applescript to do the Photoshop hand off.
+                                            //The code was made external to allow for modification in the event an Adobe update broke it.
                                             
                                             NSString *tildeHandler = @"~/Scriptik/Handlers/PhotoshopHandler";
                                             NSString *handler = [tildeHandler stringByExpandingTildeInPath];
@@ -619,17 +633,17 @@ bool stillExecuting = false;
             }
         } //end autoReport if Statement
         
-            }
+            } // end main for loop
         }); //end main dispatch
         
-    }
+    } //end main if
     
     else{
 
         //stillExecuting = false;
         return;
     }
-        }
+}
         
 - (void) updateInterface: (NSString*)theScript : (NSString*)fileNamewithPath{
     NSString *myScriptLabel = @"Script: ";
@@ -946,7 +960,9 @@ addEntryIsEnabled = @"true";
 
 - (void) initSystem{
     
-
+    //Initialize the ~/Scriptik subfolders and preference files the program uses. Here we also build the handler files if they are missing.
+    //The handlers are read from the handler files at run time. In the event adobe breaks the way they work in an update the
+    //handlers can be hacked to work.
     
     NSString *pathToFile = @"~/Scriptik";
     NSString *expandedPathToFile = [pathToFile stringByExpandingTildeInPath];
@@ -1160,6 +1176,8 @@ addEntryIsEnabled = @"true";
 }
 
 - (void) initPrefs{
+    //Here preferences are read and activated.
+    
     NSString *xmlPath = @"~/Scriptik/prefs.xml";
     NSString *expandedXMLPath = [xmlPath stringByExpandingTildeInPath];
     NSError         *error=nil;
@@ -1273,6 +1291,7 @@ addEntryIsEnabled = @"true";
 }
 
 - (IBAction)ExportConfigMenuItem:(id)sender {
+    //Export the glorious config file for safe keeping.
     NSString *configPath = @"~/Scriptik/config.xml";
     NSString *expandedPath = [configPath stringByExpandingTildeInPath];
 
@@ -1298,7 +1317,7 @@ addEntryIsEnabled = @"true";
 
 - (IBAction)ImportConfigMenuItem:(id)sender {
     
-
+    //Import a glorious config file.
 
     NSString *configPath = @"~/Scriptik/config.xml";
     NSString *expandedPath = [configPath stringByExpandingTildeInPath];
@@ -1354,7 +1373,7 @@ addEntryIsEnabled = @"true";
 }
 
 - (void) updateLog:(NSString*)theScript : (NSString*) fileNamewithPath : (NSString*) inFolder : (NSString*) outFolder{
-
+    //Update the log a timestamp, script, file name, inFolder and outFolder for eacg execution.
     NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
     NSString *myDate = [dateFormatter stringFromDate:[NSDate date]];
@@ -1381,6 +1400,7 @@ addEntryIsEnabled = @"true";
 }
 
 - (void) purgeLog{
+    //Nuke the log.
     NSString *logPath = @"~/Scriptik/scriptRunner.log";
     NSString *expandedlogPath = [logPath stringByExpandingTildeInPath];
     NSLog(@"Purge Log");
@@ -1399,6 +1419,7 @@ addEntryIsEnabled = @"true";
 }
 
 - (void) generateReport{
+    //Generate a report organized by script executions by inFolder
     NSString *xmlPath = @"~/Scriptik/config.xml";
     NSString *expandedXMLPath = [xmlPath stringByExpandingTildeInPath];
     NSError         *error=nil;
@@ -1521,6 +1542,9 @@ addEntryIsEnabled = @"true";
 
 }
 - (void) HelpViewLoad {
+    
+    //Due to some challenges with the proper help system, Help is being displayed through a web view. Not ideal.
+    
     NSURL *helpFile = [NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"]];
     [[self.HelpWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:helpFile]];
 }
@@ -1531,6 +1555,8 @@ addEntryIsEnabled = @"true";
 }
 - (NSString*) validateCheck: (NSString*)theScript : (NSString*) inFolder : (NSString*) outFolder{
 
+    //Path validation check for folders. If the path can't be found we display a dialog, and send potentially an e-mail via the mail client.
+    
     NSArray *checkArray = @[theScript, inFolder, outFolder];
 
     int i, count = [checkArray count];
