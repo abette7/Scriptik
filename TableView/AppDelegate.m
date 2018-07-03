@@ -1,6 +1,6 @@
 //
 //  AppDelegate.m
-//  TableView
+// Scriptik (Obj C version)
 //
 //  Created by Adam Betterton on 1/10/16.
 //  Copyright © 2016 Adam Betterton. All rights reserved.
@@ -47,7 +47,7 @@ NSString *reportDidFire=@"false";
 int port = 8081;
 bool stillExecuting = false;
 
-@interface AppDelegate ()
+@interface AppDelegate () <GCDAsyncSocketDelegate>
 @property (nonatomic, retain) NSTimer * theTimer;
 @property (weak) IBOutlet NSWindow *window;
 @end
@@ -84,8 +84,8 @@ bool stillExecuting = false;
         [connectedSockets addObject:newSocket];
     }
     
-    NSString *host = [newSocket connectedHost];
-    UInt16 port = [newSocket connectedPort];
+   // NSString *host = [newSocket connectedHost];
+   // UInt16 port = [newSocket connectedPort];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         @autoreleasepool {
@@ -124,7 +124,8 @@ bool stillExecuting = false;
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
     // This method is executed on the socketQueue (not the main thread)
-    // The following if statements were built to provide status updates to a network client.
+    
+    // The following if statements were added to provide status updates to a network client.
     // Commented out in this section is code for enabling start/stop from the network. This code
     // should not be implemented until encryption and authentication is added.
     
@@ -170,6 +171,9 @@ bool stillExecuting = false;
                     [sock writeData:myNetData withTimeout:-1 tag:FILE_MSG];
                     return;
                 }
+//      In the event the ScriptikNet app needs to be able to start/stop Scriptik, the following code will allow.
+//      Before activating and moving to production, an auth system should be implemented along with wrapping all
+//      socket messages/communication with encryption.
                 
 //                if ([getMSG isEqualToString:@"stop"]){
 //                    [_StartStopButton setTitle:@"Start"];
@@ -310,33 +314,33 @@ bool stillExecuting = false;
     }
     
     
-    int i, count = [inFolders count];
+    int i, count = (int) [inFolders count];
     
     //loop through each child
     for (i=0; i < count; i++) {
-        NSXMLNode *theScript = [[theScripts objectAtIndex:i]stringValue];
-        NSXMLNode *inFolder = [[inFolders objectAtIndex:i]stringValue];
-        NSXMLNode *outFolder = [[outFolders objectAtIndex:i]stringValue];
-        NSXMLNode *ScriptType = [[ScriptTypes objectAtIndex:i]stringValue];
-        NSXMLNode *Enabled = [[Enableds objectAtIndex:i]stringValue];
+        NSXMLNode *theScript = (NSXMLNode *) [[theScripts objectAtIndex:i]stringValue];
+        NSXMLNode *inFolder = (NSXMLNode *) [[inFolders objectAtIndex:i]stringValue];
+        NSXMLNode *outFolder = (NSXMLNode *) [[outFolders objectAtIndex:i]stringValue];
+        NSXMLNode *ScriptType = (NSXMLNode *) [[ScriptTypes objectAtIndex:i]stringValue];
+        NSXMLNode *Enabled = (NSXMLNode *) [[Enableds objectAtIndex:i]stringValue];
 
-        NSString *niceScript = theScript;
+                NSString *niceScript = (NSString *)theScript;
         NSArray *tScript = [niceScript componentsSeparatedByString: @"/"];
-        NSString *truncScript = [tScript lastObject];
+        NSString *truncScript = (NSString *) [tScript lastObject];
         
-        NSString *niceInFolder = inFolder;
+        NSString *niceInFolder = (NSString *)inFolder;
         NSArray *tInFolder = [niceInFolder componentsSeparatedByString: @"/"];
-        int inCount = [tInFolder count] -2;
+        int inCount = (int) [tInFolder count] -2;
         NSString *mytruncInFolder = [tInFolder objectAtIndex:inCount];
         NSString *truncInFolder = [mytruncInFolder stringByAppendingString:@"/"];
         
-        NSString *niceOutFolder = outFolder;
+        NSString *niceOutFolder = (NSString *)outFolder;
         NSArray *tOutFolder = [niceOutFolder componentsSeparatedByString: @"/"];
-        int outCount = [tOutFolder count] -2;
+        //int outCount = [tOutFolder count] -2;
         NSString *mytruncOutFolder = [tOutFolder objectAtIndex:inCount];
         NSString *truncOutFolder = [mytruncOutFolder stringByAppendingString:@"/"];
         
-        NSString *niceEnabled = Enabled;
+        NSString *niceEnabled = (NSString *)Enabled;
        
         NSString *truncEnabled = @"rutro";
         if ([niceEnabled isEqualToString:@"true"]){
@@ -407,6 +411,11 @@ bool stillExecuting = false;
         });
     });
     NSLog(@"Start");
+    
+    //In the event a executed script has an active thread after restarting Scriptik "Queueing. . ." will be displayd
+    //as the status and a new executions will wait until completion. If the script's thread stays persistant after
+    //execution is complete or failure, it will block new executions until the errant process is forcibly stopped.
+    
     if((stillExecuting == true) && (isRunning == 0)){
         [_currStatus setStringValue:@"Queueing. . ."];
         [_currSpinner startAnimation:nil];
@@ -465,7 +474,7 @@ bool stillExecuting = false;
             }
 
     
-            int i, count = [inFolders count];
+            int i, count = (int)[inFolders count];
     
     
             for (i=0; i < count; i++) {
@@ -515,8 +524,8 @@ bool stillExecuting = false;
                                             return;
                                     }
                                     
-                                    NSURL *fileName = [theFilesOnly objectAtIndex:0];
-                                    NSString *fileNamewithPath = (@"%@",[inFolder stringByAppendingPathComponent:fileName]);
+                                   NSString *fileName = [theFilesOnly objectAtIndex:0];
+                                        NSString *fileNamewithPath = ((void)(@"%@"),(NSString *)[inFolder stringByAppendingPathComponent:fileName]);
 
                
 
@@ -772,7 +781,7 @@ bool stillExecuting = false;
 - (IBAction)addChangeEntrySaveButton:(id)sender {
 
     NSMutableDictionary *value = [[NSMutableDictionary alloc] init];
-    int mySelection = [arrayController selectionIndex];
+    int mySelection = (int) [arrayController selectionIndex];
     [value setObject:addEntryScript forKey:@"Script"];
     [value setObject:addEntryInFolder forKey:@"inFolder"];
     [value setObject:addEntryOutFolder forKey:@"outFolder"];
@@ -891,7 +900,7 @@ addEntryIsEnabled = @"true";
 }
 
 - (IBAction)RemoveEntryButton:(id)sender {
-    int mySelection = [arrayController selectionIndex];
+    int mySelection = (int) [arrayController selectionIndex];
     [arrayController removeObjectAtArrangedObjectIndex:mySelection];
     [self saveXML];
     
@@ -906,7 +915,7 @@ addEntryIsEnabled = @"true";
 
 - (void) saveXML{
     NSArray *theIndex = [arrayController arrangedObjects];
-    int indexCount = [theIndex count];
+    //int indexCount = (int) [theIndex count];
     
     NSString *mypathname = [@"~/Scriptik/config.xml" stringByExpandingTildeInPath];
     NSURL *myurl = [NSURL fileURLWithPath:mypathname];
@@ -961,8 +970,8 @@ addEntryIsEnabled = @"true";
 - (void) initSystem{
     
     //Initialize the ~/Scriptik subfolders and preference files the program uses. Here we also build the handler files if they are missing.
-    //The handlers are read from the handler files at run time. In the event adobe breaks the way they work in an update the
-    //handlers can be hacked to work.
+    //The handlers are read from the handler files at run time. In the event adobe breaks the way they work in an update, the
+    //handler files can be modified to work independantly of a monolithic Scriptik update.
     
     NSString *pathToFile = @"~/Scriptik";
     NSString *expandedPathToFile = [pathToFile stringByExpandingTildeInPath];
@@ -1196,35 +1205,35 @@ addEntryIsEnabled = @"true";
     
     NSXMLElement    *rootElement=[xmlDOC rootElement];
     NSArray         *theAutostart=[rootElement nodesForXPath:@"Autostart" error:&error];
-    NSXMLNode *theAutostartValue = [[theAutostart objectAtIndex:0]stringValue];
-    NSString *myAutostartValue = theAutostartValue;
+    NSXMLNode *theAutostartValue = (NSXMLNode *) [[theAutostart objectAtIndex:0]stringValue];
+    NSString *myAutostartValue = (NSString *) theAutostartValue;
 
     NSArray         *theEmailError=[rootElement nodesForXPath:@"emailError" error:&error];
-    NSXMLNode *theEmailErrorValue = [[theEmailError objectAtIndex:0]stringValue];
-    NSString *myEmailErrorValue = theEmailErrorValue;
+    NSXMLNode *theEmailErrorValue = (NSXMLNode *) [[theEmailError objectAtIndex:0]stringValue];
+    NSString *myEmailErrorValue = (NSString *) theEmailErrorValue;
     
     NSArray         *theEmailAddress=[rootElement nodesForXPath:@"emailAddress" error:&error];
-    NSXMLNode *theEmailAddressValue = [[theEmailAddress objectAtIndex:0]stringValue];
-    NSString *myEmailAddressValue = theEmailAddressValue;
+    NSXMLNode *theEmailAddressValue = (NSXMLNode *) [[theEmailAddress objectAtIndex:0]stringValue];
+    NSString *myEmailAddressValue = (NSString *) theEmailAddressValue;
     
     NSArray         *theAutoReport=[rootElement nodesForXPath:@"autoReport" error:&error];
-    NSXMLNode   *theAutoReportValue = [[theAutoReport objectAtIndex:0]stringValue];
-    NSString    *myAutoReportValue = theAutoReportValue;
+    NSXMLNode   *theAutoReportValue = (NSXMLNode *) [[theAutoReport objectAtIndex:0]stringValue];
+    NSString    *myAutoReportValue = (NSString *) theAutoReportValue;
     
     NSArray         *theServerEnabled=[rootElement nodesForXPath:@"serverEnabled" error:&error];
-    NSXMLNode   *theServerEnabledValue = [[theServerEnabled objectAtIndex:0]stringValue];
-    NSString    *myServerEnabledValue = theServerEnabledValue;
+    NSXMLNode   *theServerEnabledValue = (NSXMLNode *) [[theServerEnabled objectAtIndex:0]stringValue];
+    NSString    *myServerEnabledValue = (NSString *) theServerEnabledValue;
     
     NSArray         *theServerPort=[rootElement nodesForXPath:@"serverPort" error:&error];
-    NSXMLNode   *theServerPortValue = [[theServerPort objectAtIndex:0]stringValue];
-    NSString    *myServerPortValue = theServerPortValue;
+    NSXMLNode   *theServerPortValue = (NSXMLNode *) [[theServerPort objectAtIndex:0]stringValue];
+    NSString    *myServerPortValue = (NSString *) theServerPortValue;
  
     if([myServerEnabledValue isEqualToString:@"true"]){
         [listenSocket disconnect];
         serverEnabled = @"true";
         [_PreferencesServerEnabledCheckBox setState:true];
         NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
-        port = [[formatter numberFromString:theServerPortValue] unsignedShortValue];
+        port = (int) [[formatter numberFromString:myServerPortValue] intValue];
         [self initServer];
     }
     else {
@@ -1246,7 +1255,7 @@ addEntryIsEnabled = @"true";
     }
     [_PreferencesPortField setStringValue:myServerPortValue];
     NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
-    port = [[formatter numberFromString:theServerPortValue] unsignedShortValue];
+    port = (int) [[formatter numberFromString:myServerPortValue] stringValue];
     if ([myAutoReportValue isEqualToString:@"true"]){
         autoReport = @"true";
         [_PrefrencesAutoReportCheckBox setState:true];
@@ -1279,8 +1288,8 @@ addEntryIsEnabled = @"true";
         emailError = @"true";
         [_PreferencesEmailErrorCheckBox setState:true];
         NSArray         *theEmailAddress=[rootElement nodesForXPath:@"emailAddress" error:&error];
-        NSXMLNode *theEmailAddressValue = [[theEmailAddress objectAtIndex:0]stringValue];
-        myEmailAddress = theEmailAddressValue;
+        NSXMLNode *theEmailAddressValue = (NSXMLNode *) [[theEmailAddress objectAtIndex:0]stringValue];
+        myEmailAddress = (NSString *) theEmailAddressValue;
     
     }
     else{
@@ -1437,11 +1446,11 @@ addEntryIsEnabled = @"true";
     }
     
     NSXMLElement    *rootElement=[xmlDOC rootElement];
-    NSArray         *theScripts=[rootElement nodesForXPath:@"theScript" error:&error];
+    //NSArray         *theScripts=[rootElement nodesForXPath:@"theScript" error:&error];
     NSArray         *inFolders=[rootElement nodesForXPath:@"inFolder" error:&error];
-    NSArray         *outFolders=[rootElement nodesForXPath:@"outFolder" error:&error];
-    NSArray         *ScriptTypes=[rootElement nodesForXPath:@"ScriptType" error:&error];
-    NSArray         *Enableds=[rootElement nodesForXPath:@"Enabled" error:&error];
+    //NSArray         *outFolders=[rootElement nodesForXPath:@"outFolder" error:&error];
+    //NSArray         *ScriptTypes=[rootElement nodesForXPath:@"ScriptType" error:&error];
+    //NSArray         *Enableds=[rootElement nodesForXPath:@"Enabled" error:&error];
     if(!inFolders)
     {
         NSLog(@"Unable to get 'XMLElement': %@",error);
@@ -1460,23 +1469,23 @@ addEntryIsEnabled = @"true";
     NSString *logPath = @"~/Scriptik/scriptRunner.log";
     NSString *expandedlogPath = [logPath stringByExpandingTildeInPath];
     NSString *reportLine = @"";
-    int i, count = [inFolders count];
+    int i, count = (int) [inFolders count];
     
     int totalCount = 0;
     for (i=0; i < count; i++) {
-        NSString *theScript = [[theScripts objectAtIndex:i]stringValue];
+       //NSString *theScript = [[theScripts objectAtIndex:i]stringValue];
         NSString *inFolder = [[inFolders objectAtIndex:i]stringValue];
-        NSString *outFolder = [[outFolders objectAtIndex:i]stringValue];
-        NSString *ScriptType = [[ScriptTypes objectAtIndex:i]stringValue];
-        NSString *Enabled = [[Enableds objectAtIndex:i]stringValue];
+       //NSString *outFolder = [[outFolders objectAtIndex:i]stringValue];
+       //NSString *ScriptType = [[ScriptTypes objectAtIndex:i]stringValue];
+       //NSString *Enabled = [[Enableds objectAtIndex:i]stringValue];
 
         NSTask *task;
         task = [[NSTask alloc] init];
         [task setLaunchPath: @"/usr/bin/grep"];
         [task waitUntilExit];
 
-        NSString *words = [NSString stringWithFormat:@"'%@'",inFolder];
-        NSString *quotedLogPath = [NSString stringWithFormat:@"'%@'",expandedlogPath];
+        //NSString *words = [NSString stringWithFormat:@"'%@'",inFolder];
+        //NSString *quotedLogPath = [NSString stringWithFormat:@"'%@'",expandedlogPath];
         NSArray *arguments;
         arguments = [NSArray arrayWithObjects: @"-o", inFolder, expandedlogPath, nil];
         
@@ -1498,7 +1507,7 @@ addEntryIsEnabled = @"true";
         string = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
         
         NSArray *myList = [string componentsSeparatedByString:@"\n"];
-        int myCount = ([myList count] - 1) / 2 ;
+        int myCount = (int) ([myList count] - 1) / 2 ;
         reportLine = [NSString stringWithFormat:@"%@ %@ [%d executions]\r\r",reportLine,inFolder, myCount];
         totalCount = totalCount + myCount;
         
@@ -1555,11 +1564,11 @@ addEntryIsEnabled = @"true";
 }
 - (NSString*) validateCheck: (NSString*)theScript : (NSString*) inFolder : (NSString*) outFolder{
 
-    //Path validation check for folders. If the path can't be found we display a dialog, and send potentially an e-mail via the mail client.
+    //Path validation check for folders. If the path can't be found we display a dialog, and potentially send an e-mail via the mail client.
     
     NSArray *checkArray = @[theScript, inFolder, outFolder];
 
-    int i, count = [checkArray count];
+    int i, count = (int) [checkArray count];
     for (i=0; i < count; i++) {
     NSString *checkPath = checkArray[i];
     NSString *expandedCheckPath = [checkPath stringByExpandingTildeInPath];
