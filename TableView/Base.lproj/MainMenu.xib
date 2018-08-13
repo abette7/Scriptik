@@ -265,13 +265,12 @@
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="207" width="846" height="208"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
-            <view key="contentView" id="DGj-v6-DMb">
+            <view key="contentView" wantsLayer="YES" id="DGj-v6-DMb">
                 <rect key="frame" x="0.0" y="0.0" width="846" height="208"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ehY-MM-9sE">
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ehY-MM-9sE">
                         <rect key="frame" x="136" y="1" width="64" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Edit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="F4q-cS-hKe">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -280,9 +279,11 @@
                             <action selector="EditButton:" target="Voe-Tx-rLC" id="Leg-CE-ODY"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aP9-iC-IeF">
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aP9-iC-IeF">
                         <rect key="frame" x="22" y="2" width="40" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="28" id="Ie1-Q5-RuJ"/>
+                        </constraints>
                         <buttonCell key="cell" type="push" title="+" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xvw-qQ-w30">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -291,9 +292,8 @@
                             <action selector="AddEntryButton:" target="Voe-Tx-rLC" id="Mnc-sf-HM1"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZmK-Ix-7PF">
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZmK-Ix-7PF">
                         <rect key="frame" x="757" y="2" width="75" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Pd0-JH-rMp">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -302,10 +302,9 @@
                             </connections>
                         </buttonCell>
                     </button>
-                    <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KR8-PO-NKn">
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KR8-PO-NKn">
                         <rect key="frame" x="20" y="44" width="806" height="144"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <clipView key="contentView" ambiguous="YES" id="AYT-nN-7d8">
+                        <clipView key="contentView" id="AYT-nN-7d8">
                             <rect key="frame" x="1" y="0.0" width="804" height="143"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
@@ -431,9 +430,11 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S20-8l-J6Q">
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="S20-8l-J6Q">
                         <rect key="frame" x="56" y="2" width="40" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="28" id="voh-AK-bCp"/>
+                        </constraints>
                         <buttonCell key="cell" type="push" title="-" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4dZ-3i-TWz">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system" size="18"/>
@@ -443,8 +444,22 @@
                         </connections>
                     </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="ehY-MM-9sE" firstAttribute="leading" secondItem="S20-8l-J6Q" secondAttribute="trailing" constant="52" id="1xC-wF-zBf"/>
+                    <constraint firstAttribute="trailing" secondItem="KR8-PO-NKn" secondAttribute="trailing" constant="20" symbolic="YES" id="57I-Rg-aMz"/>
+                    <constraint firstItem="ZmK-Ix-7PF" firstAttribute="trailing" secondItem="KR8-PO-NKn" secondAttribute="trailing" id="JaK-vY-wrT"/>
+                    <constraint firstItem="KR8-PO-NKn" firstAttribute="top" secondItem="DGj-v6-DMb" secondAttribute="top" constant="20" symbolic="YES" id="MjB-bX-YS5"/>
+                    <constraint firstItem="ehY-MM-9sE" firstAttribute="top" secondItem="KR8-PO-NKn" secondAttribute="bottom" constant="15" id="a3Z-U7-xGb"/>
+                    <constraint firstAttribute="bottom" secondItem="KR8-PO-NKn" secondAttribute="bottom" constant="44" id="d8k-0V-kg2"/>
+                    <constraint firstItem="KR8-PO-NKn" firstAttribute="leading" secondItem="DGj-v6-DMb" secondAttribute="leading" constant="20" symbolic="YES" id="dXy-oE-Yr7"/>
+                    <constraint firstItem="aP9-iC-IeF" firstAttribute="leading" secondItem="DGj-v6-DMb" secondAttribute="leading" constant="28" id="f67-nh-jLx"/>
+                    <constraint firstItem="ZmK-Ix-7PF" firstAttribute="baseline" secondItem="aP9-iC-IeF" secondAttribute="baseline" id="flH-QS-hC2"/>
+                    <constraint firstItem="aP9-iC-IeF" firstAttribute="top" secondItem="KR8-PO-NKn" secondAttribute="bottom" constant="14" id="sS2-cY-kqB"/>
+                    <constraint firstItem="S20-8l-J6Q" firstAttribute="leading" secondItem="aP9-iC-IeF" secondAttribute="trailing" constant="6" id="u6R-RS-dzT"/>
+                    <constraint firstItem="S20-8l-J6Q" firstAttribute="top" secondItem="aP9-iC-IeF" secondAttribute="top" id="ypD-2i-4Lk"/>
+                </constraints>
             </view>
-            <point key="canvasLocation" x="475" y="370"/>
+            <point key="canvasLocation" x="583" y="399"/>
         </window>
         <window title="Add/Change Entry" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="eLs-ry-OEe">
             <windowStyleMask key="styleMask" titled="YES"/>

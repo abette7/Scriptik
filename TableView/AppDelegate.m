@@ -2,6 +2,9 @@
 //  AppDelegate.m
 // Scriptik (Obj C version)
 //
+// Garbage collection was removed from Cocoa-Applescript. This necessitated the need to move to Obj C.
+// In the end this was best for the application as we can now use threadding to prevent locking the GUI.
+//
 //  Created by Adam Betterton on 1/10/16.
 //  Copyright © 2016 Adam Betterton. All rights reserved.
 //
@@ -951,6 +954,7 @@ addEntryIsEnabled = @"true";
 }
 
 - (void) initServer{
+    //Listen on on specified port to send status updates via remote client. (ScriptikNet)
     socketQueue = dispatch_queue_create("socketQueue", NULL);
     
     listenSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:socketQueue];
