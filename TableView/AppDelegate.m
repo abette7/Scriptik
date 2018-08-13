@@ -491,7 +491,7 @@ bool stillExecuting = false;
                 NSString *isEnabled = Enabled;
                 
                 //NSLog(@"%@,%@",inFolder,Enabled);
-                    if (isEnabled){
+                    if ([isEnabled isEqualToString:@"true"]){
                         
                         NSString *pathValidate = [self validateCheck:theScript:inFolder:outFolder:ScriptType];
             
