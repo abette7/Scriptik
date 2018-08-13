@@ -108,7 +108,7 @@
 - (void) generateReport;
 - (void) purgeLog;
 - (void) HelpViewLoad;
-- (NSString*) validateCheck: (NSString*)theScript : (NSString*) inFolder : (NSString*) outFolder;
+- (NSString*) validateCheck: (NSString*)theScript : (NSString*) inFolder : (NSString*) outFolder : (NSString*) ScriptType;
 
 @end
 
