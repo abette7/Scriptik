@@ -493,7 +493,7 @@ bool stillExecuting = false;
                 //NSLog(@"%@,%@",inFolder,Enabled);
                     if (isEnabled){
                         
-                        NSString *pathValidate = [self validateCheck:theScript:inFolder:outFolder];
+                        NSString *pathValidate = [self validateCheck:theScript:inFolder:outFolder:ScriptType];
             
                             if ([pathValidate isEqualToString:@"true"]){
                 
@@ -585,8 +585,10 @@ bool stillExecuting = false;
                                             NSArray *setArguments = [NSArray arrayWithObjects:fileNamewithPath, inFolder, outFolder, nil];
                                             
                                             [self updateLog:theScript:fileNamewithPath:inFolder:outFolder];
-
+                                          
+                                            
                                             [[NSTask launchedTaskWithLaunchPath:interpreter arguments:setArguments]waitUntilExit];
+                                            
                                         }
                                     }
                                         
@@ -618,10 +620,10 @@ bool stillExecuting = false;
                                     [_currSpinner stopAnimation:nil];
                                 });
                                 //dispatch_set_finalizer_f(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), NULL);
-                                stillExecuting = false;
+                                //stillExecuting = false;
                 
                             }
-                    
+                    stillExecuting = false;
             
                 }
                 //This is not a good place for the auto report code, should be in a function.
@@ -1386,7 +1388,7 @@ addEntryIsEnabled = @"true";
 }
 
 - (void) updateLog:(NSString*)theScript : (NSString*) fileNamewithPath : (NSString*) inFolder : (NSString*) outFolder{
-    //Update the log a timestamp, script, file name, inFolder and outFolder for eacg execution.
+    //Update the log a timestamp, script, file name, inFolder and outFolder for each execution.
     NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
     NSString *myDate = [dateFormatter stringFromDate:[NSDate date]];
@@ -1566,7 +1568,7 @@ addEntryIsEnabled = @"true";
     [self HelpViewLoad];
     [_HelpWindow makeKeyAndOrderFront:self];
 }
-- (NSString*) validateCheck: (NSString*)theScript : (NSString*) inFolder : (NSString*) outFolder{
+- (NSString*) validateCheck: (NSString*)theScript : (NSString*) inFolder : (NSString*) outFolder : (NSString*) ScriptType{
 
     //Path validation check for folders. If the path can't be found we display a dialog, and potentially send an e-mail via the mail client.
     
@@ -1576,11 +1578,33 @@ addEntryIsEnabled = @"true";
     for (i=0; i < count; i++) {
     NSString *checkPath = checkArray[i];
     NSString *expandedCheckPath = [checkPath stringByExpandingTildeInPath];
-
+    
     
     BOOL fileHandle = [[NSFileManager defaultManager] fileExistsAtPath:expandedCheckPath];
     if (fileHandle){
        // NSLog(@"%@",checkPath);
+        
+    //Validation check for shell script being flagged as executable
+        if ([ScriptType isEqualToString:@"ShellScript"])
+        {
+            
+        
+        BOOL isExec = [[NSFileManager defaultManager] isExecutableFileAtPath:theScript];
+        if (!isExec){
+            
+            NSString *alertString = [NSString stringWithFormat:@"Warning: %@ is not executable.\rRemember to chmod +x", theScript];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_alertWindow orderFront:self];
+                
+                [_alertMessage setStringValue:alertString];
+                
+                NSImage *warningImage = [[NSImage alloc] initWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"Warning" ofType:@"png"]];
+                [_alertIcon setImage:warningImage];
+                
+            });
+            return @"false";
+        }
+        }
     }
     else{
         NSString *myCheck = @"null";
@@ -1593,12 +1617,18 @@ addEntryIsEnabled = @"true";
         if (i==2){
              myCheck = @"outFolder";
         }
+        
         NSString *alertString = [NSString stringWithFormat:@"Warning: Can't find %@\r%@", myCheck, checkPath];
+        dispatch_async(dispatch_get_main_queue(), ^{
         [_alertWindow orderFront:self];
+           
         [_alertMessage setStringValue:alertString];
 
         NSImage *warningImage = [[NSImage alloc] initWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"Warning" ofType:@"png"]];
         [_alertIcon setImage:warningImage];
+       
+         });
+        
         
         if ([validateError  isEqual: @"false"]){
             if ([emailError isEqual: @"true"]){
@@ -1623,6 +1653,7 @@ addEntryIsEnabled = @"true";
             }
         }
         return @"false";
+            
     }
     }
     return @"true";
