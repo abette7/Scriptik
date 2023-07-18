@@ -12,7 +12,7 @@
 #import "AppDelegate.h"
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <CocoaAsyncSocket/GCDAsyncUdpSocket.h>
-
+#include <sys/xattr.h>
 #define WELCOME_MSG  0
 #define ECHO_MSG     1
 #define WARNING_MSG  2
@@ -142,7 +142,7 @@ bool stillExecuting = false;
                 if ([getMSG isEqualToString:@"get"]){
                         NSString *myNetString = @"";
                     
-                        NSString *myStatus = [_currStatus stringValue];
+                    NSString *myStatus = [self->_currStatus stringValue];
                         myNetString = [NSString stringWithFormat: @"%@\r\n",myStatus];
                     
                     
@@ -154,7 +154,7 @@ bool stillExecuting = false;
                 if ([getMSG isEqualToString:@"getScript"]){
                     NSString *myNetString = @"";
                     
-                    NSString *myStatus = [_currScript stringValue];
+                    NSString *myStatus = [self->_currScript stringValue];
                     myNetString = [NSString stringWithFormat: @"%@\r\n",myStatus];
                     
                     
@@ -166,7 +166,7 @@ bool stillExecuting = false;
                 if ([getMSG isEqualToString:@"getFile"]){
                     NSString *myNetString = @"";
                     
-                    NSString *myStatus = [_currFile stringValue];
+                    NSString *myStatus = [self->_currFile stringValue];
                     myNetString = [NSString stringWithFormat: @"%@\r\n",myStatus];
                     
                     
@@ -416,7 +416,7 @@ bool stillExecuting = false;
     NSLog(@"Start");
     
     //In the event a executed script has an active thread after restarting Scriptik "Queueing. . ." will be displayd
-    //as the status and a new executions will wait until completion. If the script's thread stays persistant after
+    //as the status and new executions will wait until completion. If the script's thread stays persistant after
     //execution is complete or failure, it will block new executions until the errant process is forcibly stopped.
     
     if((stillExecuting == true) && (isRunning == 0)){
@@ -443,7 +443,7 @@ bool stillExecuting = false;
         stillExecuting = true;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             dispatch_async(dispatch_get_main_queue(), ^{
-                [_currStatus setStringValue:@"Idle. . ."];
+                [self->_currStatus setStringValue:@"Idle. . ."];
             });
             
             NSString *xmlPath = @"~/Scriptik/config.xml";
@@ -521,16 +521,26 @@ bool stillExecuting = false;
                                             }
                                     }
 
-                                    if ([theFilesOnly count] != 0){
-                                        if (isRunning == 0){
-                                            stillExecuting = false;
-                                            return;
+                                if ([theFilesOnly count] != 0){
+                                    if (isRunning == 0){
+                                        stillExecuting = false;
+                                        return;
                                     }
                                     
-                                   NSString *fileName = [theFilesOnly objectAtIndex:0];
-                                        NSString *fileNamewithPath = ((void)(@"%@"),(NSString *)[inFolder stringByAppendingPathComponent:fileName]);
-
-               
+                                    NSString *fileName = [theFilesOnly objectAtIndex:0];
+                                   
+                                                                   
+                                    NSString *fileNamewithPath = ((void)(@"%@"),(NSString *)[inFolder stringByAppendingPathComponent:fileName]);
+                                    //Place File isBusy check here.
+                                    const char stupidPath = fileNamewithPath;
+                                    BOOL hasFinderInfo = getxattr(stupidPath, "com.apple.FinderInfo", NULL, 0, 0, 0) != -1;
+                                    if(hasFinderInfo){
+                                        NSLog(@"File is not busy");
+                                    }
+                                    else{
+                                        NSLog(@"FILE IS BUSY");
+                                    }
+                                    //EndFile isBusy check
 
                                     if ([ScriptType isEqualToString:@"AppleScript"]){
                                         if ([isEnabled isEqualToString:@"true"]){
@@ -617,7 +627,7 @@ bool stillExecuting = false;
                                 
                                 dispatch_async(dispatch_get_main_queue(), ^{
                                     [self updateInterfaceFinish];
-                                    [_currSpinner stopAnimation:nil];
+                                    [self->_currSpinner stopAnimation:nil];
                                 });
                                 //dispatch_set_finalizer_f(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), NULL);
                                 //stillExecuting = false;
@@ -1594,12 +1604,12 @@ addEntryIsEnabled = @"true";
             
             NSString *alertString = [NSString stringWithFormat:@"Warning: %@ is not executable.\rRemember to chmod +x", theScript];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [_alertWindow orderFront:self];
+                [self->_alertWindow orderFront:self];
                 
-                [_alertMessage setStringValue:alertString];
+                [self->_alertMessage setStringValue:alertString];
                 
                 NSImage *warningImage = [[NSImage alloc] initWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"Warning" ofType:@"png"]];
-                [_alertIcon setImage:warningImage];
+                [self->_alertIcon setImage:warningImage];
                 
             });
             return @"false";
@@ -1620,12 +1630,12 @@ addEntryIsEnabled = @"true";
         
         NSString *alertString = [NSString stringWithFormat:@"Warning: Can't find %@\r%@", myCheck, checkPath];
         dispatch_async(dispatch_get_main_queue(), ^{
-        [_alertWindow orderFront:self];
+            [self->_alertWindow orderFront:self];
            
-        [_alertMessage setStringValue:alertString];
+            [self->_alertMessage setStringValue:alertString];
 
         NSImage *warningImage = [[NSImage alloc] initWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"Warning" ofType:@"png"]];
-        [_alertIcon setImage:warningImage];
+            [self->_alertIcon setImage:warningImage];
        
          });
         

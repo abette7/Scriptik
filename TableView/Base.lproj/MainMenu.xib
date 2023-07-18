@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="21507"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -190,13 +190,13 @@
                     </menu>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="335" y="97"/>
+            <point key="canvasLocation" x="181" y="-178"/>
         </menu>
         <window title="Scriptik" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="503" height="147"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1175"/>
             <value key="minSize" type="size" width="503" height="147"/>
             <value key="maxSize" type="size" width="503" height="147"/>
             <view key="contentView" id="EiT-Mj-1SZ">
@@ -260,17 +260,17 @@
             </view>
             <point key="canvasLocation" x="475.5" y="79.5"/>
         </window>
-        <window title="Manage" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="Hjn-Wd-cXQ">
+        <window title="Manage" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="Hjn-Wd-cXQ">
             <windowStyleMask key="styleMask" titled="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="207" width="846" height="208"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1175"/>
             <view key="contentView" wantsLayer="YES" id="DGj-v6-DMb">
                 <rect key="frame" x="0.0" y="0.0" width="846" height="208"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ehY-MM-9sE">
-                        <rect key="frame" x="136" y="1" width="64" height="32"/>
+                        <rect key="frame" x="135" y="2" width="58" height="32"/>
                         <buttonCell key="cell" type="push" title="Edit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="F4q-cS-hKe">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -280,7 +280,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aP9-iC-IeF">
-                        <rect key="frame" x="22" y="2" width="40" height="32"/>
+                        <rect key="frame" x="21" y="3" width="42" height="32"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="28" id="Ie1-Q5-RuJ"/>
                         </constraints>
@@ -293,7 +293,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZmK-Ix-7PF">
-                        <rect key="frame" x="757" y="2" width="75" height="32"/>
+                        <rect key="frame" x="763" y="3" width="70" height="32"/>
                         <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Pd0-JH-rMp">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -304,20 +304,19 @@
                     </button>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KR8-PO-NKn">
                         <rect key="frame" x="20" y="44" width="806" height="144"/>
-                        <clipView key="contentView" id="AYT-nN-7d8">
-                            <rect key="frame" x="1" y="0.0" width="804" height="143"/>
+                        <clipView key="contentView" drawsBackground="NO" id="AYT-nN-7d8">
+                            <rect key="frame" x="1" y="1" width="804" height="142"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="y5x-nj-am4" id="Y2P-zk-83Q">
-                                    <rect key="frame" x="0.0" y="0.0" width="804" height="120"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="804" height="117"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn editable="NO" width="194.0546875" minWidth="40" maxWidth="1000" id="4H2-Ez-PRe">
+                                        <tableColumn editable="NO" width="181.0546875" minWidth="40" maxWidth="1000" id="4H2-Ez-PRe">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Script">
-                                                <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
@@ -331,9 +330,8 @@
                                                 <binding destination="8n1-jZ-VFe" name="value" keyPath="arrangedObjects.tScript" id="nju-dk-Hnv"/>
                                             </connections>
                                         </tableColumn>
-                                        <tableColumn editable="NO" width="250" minWidth="40" maxWidth="1000" id="qB4-sG-Cii">
+                                        <tableColumn editable="NO" width="237" minWidth="40" maxWidth="1000" id="qB4-sG-Cii">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="inFolder">
-                                                <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
@@ -351,9 +349,8 @@
                                                 </binding>
                                             </connections>
                                         </tableColumn>
-                                        <tableColumn identifier="" editable="NO" width="216.515625" minWidth="10" maxWidth="3.4028234663852886e+38" id="Fce-4i-jyQ">
+                                        <tableColumn editable="NO" width="204.515625" minWidth="10" maxWidth="3.4028234663852886e+38" id="Fce-4i-jyQ">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="outFolder">
-                                                <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
@@ -371,9 +368,8 @@
                                                 </binding>
                                             </connections>
                                         </tableColumn>
-                                        <tableColumn identifier="" editable="NO" width="78" minWidth="78" maxWidth="78" id="aiy-JQ-2gQ">
+                                        <tableColumn editable="NO" width="78" minWidth="78" maxWidth="78" id="aiy-JQ-2gQ">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Type">
-                                                <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
@@ -387,9 +383,8 @@
                                                 <binding destination="8n1-jZ-VFe" name="value" keyPath="arrangedObjects.ScriptType" id="nZJ-85-Zpg"/>
                                             </connections>
                                         </tableColumn>
-                                        <tableColumn identifier="" editable="NO" width="50" minWidth="50" maxWidth="50" id="KGC-FR-k4p">
+                                        <tableColumn editable="NO" width="50" minWidth="50" maxWidth="50" id="KGC-FR-k4p">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Enabled">
-                                                <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
@@ -416,6 +411,7 @@
                                     </connections>
                                 </tableView>
                             </subviews>
+                            <nil key="backgroundColor"/>
                         </clipView>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="8jO-2B-HTr">
                             <rect key="frame" x="-7" y="8" width="0.0" height="15"/>
@@ -425,13 +421,13 @@
                             <rect key="frame" x="-14" y="16" width="15" height="0.0"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <tableHeaderView key="headerView" id="y5x-nj-am4">
-                            <rect key="frame" x="0.0" y="0.0" width="804" height="23"/>
+                        <tableHeaderView key="headerView" wantsLayer="YES" id="y5x-nj-am4">
+                            <rect key="frame" x="0.0" y="0.0" width="804" height="25"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="S20-8l-J6Q">
-                        <rect key="frame" x="56" y="2" width="40" height="32"/>
+                        <rect key="frame" x="55" y="3" width="42" height="32"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="28" id="voh-AK-bCp"/>
                         </constraints>
@@ -459,13 +455,13 @@
                     <constraint firstItem="S20-8l-J6Q" firstAttribute="top" secondItem="aP9-iC-IeF" secondAttribute="top" id="ypD-2i-4Lk"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="583" y="399"/>
+            <point key="canvasLocation" x="721" y="569"/>
         </window>
-        <window title="Add/Change Entry" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="eLs-ry-OEe">
+        <window title="Add/Change Entry" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="eLs-ry-OEe">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="480" height="233"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1175"/>
             <view key="contentView" id="bty-Fy-Rc9">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="233"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -641,11 +637,11 @@ Gw
             </view>
             <point key="canvasLocation" x="536" y="519.5"/>
         </window>
-        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="Mdd-o3-OnH">
+        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="Mdd-o3-OnH">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="207" width="428" height="300"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1175"/>
             <view key="contentView" id="bm6-Tj-4D5">
                 <rect key="frame" x="0.0" y="0.0" width="428" height="300"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -677,7 +673,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="aUR-9h-sMQ">
                             <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
@@ -719,7 +715,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Ncm-IU-l4f">
                             <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
@@ -727,11 +723,11 @@ Gw
             </view>
             <point key="canvasLocation" x="408" y="344"/>
         </window>
-        <window title="scriptRunner Help" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="e2M-hF-1Jh">
+        <window title="scriptRunner Help" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="e2M-hF-1Jh">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="207" width="879" height="422"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1175"/>
             <view key="contentView" id="rhK-Mq-BWX">
                 <rect key="frame" x="0.0" y="0.0" width="879" height="422"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -752,11 +748,11 @@ Gw
             </view>
             <point key="canvasLocation" x="610.5" y="372"/>
         </window>
-        <window title="Scriptik Alert" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="aA2-Wj-Bb9">
+        <window title="Scriptik Alert" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="aA2-Wj-Bb9">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="207" width="503" height="143"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1175"/>
             <view key="contentView" id="M46-Nz-LBa">
                 <rect key="frame" x="0.0" y="0.0" width="503" height="143"/>
                 <autoresizingMask key="autoresizingMask"/>
